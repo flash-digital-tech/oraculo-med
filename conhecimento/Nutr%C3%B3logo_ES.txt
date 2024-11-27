@@ -1,0 +1,50 @@
+--- Aba: Links ---
+Links
+https://www.doctoralia.com.br/pesquisa?q=Nutr%C3%B3logo&loc=Espirito%20Santo&filters%5Bspecializations%5D%5B%5D=63
+
+--- Aba: Dados ---
+nome	crm	site	redes_sociais	endereco	telefone	link
+Mariana Liparizi				Avenida Nossa Senhora dos Navegantes 451,	(27) 99738-3044	https://www.doctoralia.com.br/mariana-liparizi/nutrologo/vitoria
+Eduardo Passamani Fagundes	CRM SP 174465			Rua Professor Almeida Cousin 125,	(27) 99701-8987	https://www.doctoralia.com.br/eduardo-passamani-fagundes/nutrologo/vitoria
+Marcos Martins						https://www.doctoralia.com.br/clinicas/instituto-plenitud
+Gabrieli Ottoni				Rua Alfeu Alves Pereira, 60,	(27) 99222-2919	https://www.doctoralia.com.br/gabrieli-ottoni/endocrinologista-nutrologo/vitoria
+Arthur Ferrari Salles				Rua José Alexandre Buaiz 350,	(27) 99514-0409	https://www.doctoralia.com.br/arthur-ferrari-salles/nutrologo/vila-velha
+Thiago Henrique Cruz Ghidetti				Av. Central, 1265 - Parque Res. Laranjeiras,	(27) 2127-1246	https://www.doctoralia.com.br/thiago-henrique-cruz-ghidetti/nutrologo/vitoria
+Ricardo Folador Bergamaschi				Avenida Nossa Senhora da Penha, 565. Ed. Royal Center salas 1001/2. Em frente ao Centro da Praia.,	(27) 3207-5506	https://www.doctoralia.com.br/ricardo-folador-bergamaschi/medico-do-esporte-ortopedista-traumatologista-nutrologo/vitoria
+Rachel Almeida dos Santos				Rua Costa Pereira, 152,		https://www.doctoralia.com.br/rachel-almeida-dos-santos-2/nutrologo/cachoeiro-de-itapemirim
+Eduardo						https://www.doctoralia.com.br/clinicas/port-vitta-kids
+Bruno Oliveira				Av. Nossa senhora dos Navegantes, 955, sala 1503,		https://www.doctoralia.com.br/bruno-oliveira-6/medico-de-familia-nutrologo/vitoria
+Karla Fazollo Paiva Dornelas				Rua Morais de Carvalho 1.100,	(33) 99840-3555	https://www.doctoralia.com.br/karla-fazollo-paiva-dornelas/nutrologo/resplendor
+Thays de Paula Miranda				Avenida do Canal - 245 - SALAS 410 E 411, CENTRO EMPRESARIAL SHOPPING PRAIA DA COSTA OFFICES  Praia da Costa,		https://www.doctoralia.com.br/thays-de-paula-miranda/nutrologo/vila-velha
+Ketelyn Alves						https://www.doctoralia.com.br/clinicas/centro-medico-jardins-2
+Wilson Sampaio				Avenida Cerejeira, Bairro, Movelar, Linhares-ES Sala 310 Torre 2 (Ao Lado do Shopping),		https://www.doctoralia.com.br/wilson-sampaio/nutrologo/linhares
+Leônidas Tavares Silveira	CRM RJ 52			R. Ten. José Teixeira, 488,		https://www.doctoralia.com.br/leonidas-tavares-silveira/endocrinologista-nutrologo-medico-clinico-geral/bom-jesus-do-itabapoana
+Ana Melo						https://www.doctoralia.com.br/clinicas/clinica-medica-xv-de-novembro
+Isabella						https://www.doctoralia.com.br/clinicas/clinica-medica-gloria
+Amanda Weberling				Rua Arthur Czartoryski, 680 - Edifício University Center 420, Bairro Jardim da Penha,		https://www.doctoralia.com.br/amanda-weberling/nutrologo/vitoria
+Juliana Pagani Aguilar Tristão				Rua José Alexandre Buaiz 350(sala 1908),		https://www.doctoralia.com.br/juliana-pagani-aguilar-tristao/nutrologo/vitoria
+						https://www.doctoralia.com.br/clinicas/multiglia-clinica-multiprofissional
+Pietro Dall’Orto Lima				Rua Tenente Mário Francisco Brito,		https://www.doctoralia.com.br/pietro-dall-orto-lima/nutrologo-cardiologista/vitoria
+						https://www.doctoralia.com.br/clinicas/centro-de-especialidades-medicas-dr-edson-dias-cemed
+Cintia Sarmento Valle				Av. Jerônimo  Monteiro 641 (Clínica Médica Glória),		https://www.doctoralia.com.br/cintia-sarmento-valle/internista-nutrologo/vila-velha
+Miguel Figueira Sarkis Filho				Av. Adalberto Simão Nader, 565.,		https://www.doctoralia.com.br/miguel-figueira-sarkis-filho/nutrologo/vitoria
+Jaqueline Biancarde				Clínica Cemel, Av. Presidente Getúlio Vargas 1220, torre A, Sala 201 Laguna Center ,		https://www.doctoralia.com.br/jaqueline-biancarde/nutrologo/linhares
+Weder Willian de Melo				Av João Palacio, 300, Sl 418,		https://www.doctoralia.com.br/weder-willian-de-melo-2/nutrologo/serra
+Kamilla Piazentini				R. Dr. Freitas Lima,		https://www.doctoralia.com.br/kamilla-piazentini/nutrologo/vila-velha
+Manoel Santos Nascimento						https://www.doctoralia.com.br/clinicas/instituto-hope
+Bruna Coutinho						https://www.doctoralia.com.br/clinicas/relevium-centro-de-controle-da-dor
+usuário						https://www.doctoralia.com.br/clinicas/assip-2
+Jose Maciel						https://www.doctoralia.com.br/clinicas/hospital-evangelico-vila-velha
+anônimo						https://www.doctoralia.com.br/clinicas/heci-hospital-evangelico-de-cachoeiro-de-itapemirim
+Marcos André Malta Dantas				Rua Santana do Iapó, 31 (Ed. Livorno- sala 203),		https://www.doctoralia.com.br/marcos-andre-malta-dantas/medico-clinico-geral-nutrologo/guarapari
+Thaís Policário Chagas Stoco				Avenida Nossa Senhora dos Navegantes, 755, sala 110 Edifício Palácio da Praia,		https://www.doctoralia.com.br/thais-policario-chagas-stoco/nutrologo/vitoria
+						https://www.doctoralia.com.br/clinicas/consultorio-dr-eduardo-passamani-fagundes
+Francisca De Assis Nobre Moreira				Av T 1, 836 Qd 40 Lt 8 Sl 605,		https://www.doctoralia.com.br/francisca-de-assis-nobre-moreira/nutrologo/vitoria
+Emanuel Patricio Ribeiro Gomes				Antonio Caetano Goncalves , 02 - CLINEFRO ,		https://www.doctoralia.com.br/emanuel-patricio-ribeiro-gomes/intensivista-nefrologista-nutrologo/barra-de-sao-francisco
+Rafael Carvalho De Morais				Rua Misael Pedreira Da Silva, 98 / Sala 1010 - Edifício Empire Center, Santa Lúcia,		https://www.doctoralia.com.br/rafael-carvalho-de-morais/nutrologo/santa-maria
+Karoline Calfa Pitanga				Rua Vênus,		https://www.doctoralia.com.br/karoline-calfa-pitanga/nutrologo/vila-velha
+Gilmaria Millere Tavares				Rua João Nunes Coelho 53 - 402,		https://www.doctoralia.com.br/gilmaria-millere-tavares/cirurgiao-geral-nutrologo/vitoria
+Lydia Maria Machado Barbosa				Av. Leitão da Silva, 2311,		https://www.doctoralia.com.br/lydia-maria-machado-barbosa/pediatra/vitoria
+Pedro Luiz Ferreira de Siqueira Junior				Av. Evande Americo Comarela, 135 - Sala 201,		https://www.doctoralia.com.br/pedro-luiz-ferreira-de-siqueira-junior/nutrologo/venda-nova-do-imigrante
+Adilson Andrade de Gouvea				Rua Guilherme Faria, 86,		https://www.doctoralia.com.br/adilson-andrade-de-gouvea/nutrologo/vila-velha
+
