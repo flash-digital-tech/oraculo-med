@@ -133,13 +133,14 @@ async def handle_create_customer(cliente):
             st.error(f"Erro: {str(e)}")
 
 
+@st.dialog("cadastro")
 def cadastrar_cliente():
-    st.title("Sistema Flash Pagamentos")
+    st.title("sistema flash pagamentos")
 
-    # Seção para criar um novo cliente
-    st.header("Criar Novo Cliente")
+    # seção para criar um novo cliente
+    st.header("criar novo cliente")
 
-    # Inicializa os campos no session_state se não existirem
+    # inicializa os campos no session_state se não existirem
     if 'name' not in st.session_state:
         st.session_state.name = ""
     if 'documento' not in st.session_state:
@@ -163,44 +164,61 @@ def cadastrar_cliente():
     if 'username' not in st.session_state:
         st.session_state.username = ""
     if 'image' not in st.session_state:
-        st.session_state.image = None  # Inicializa como None
+        st.session_state.image = None  # inicializa como None
 
-    # Formulário para cadastro de cliente
+    # formulário para cadastro de cliente
     with st.form(key='form_cliente'):
-        # Cria colunas para organizar os campos
-        col1, col2 = st.columns(2)  # Colunas para name e WhatsApp/Email
-        col3, col4 = st.columns(2)  # Colunas para Endereço e Bairro/CEP
+        # cria colunas para organizar os campos
+        col1, col2 = st.columns(2)  # colunas para name e whatsapp/email
+        col3, col4 = st.columns(2)  # colunas para endereço e bairro/cep
 
-        # Coleta de dados do cliente
+        # coleta de dados do cliente
         with col1:
-            name = st.text_input("Nome:", value=st.session_state.name)
-            documento = st.text_input("CPF/CNPJ", value=st.session_state.documento)
+            name = st.text_input("nome:", value=st.session_state.name)
+            documento = st.text_input("cpf/cnpj", value=st.session_state.documento)
         with col2:
-            email = st.text_input("E-mail", value=st.session_state.email)
-            whatsapp = st.text_input(label="WhatsApp", placeholder='Exemplo: 31900001111', value=st.session_state.whatsapp)
+            email = st.text_input("e-mail", value=st.session_state.email)
+            whatsapp = st.text_input(label="whatsapp", placeholder='exemplo: 31900001111', value=st.session_state.whatsapp)
 
         with col3:
-            endereco = st.text_input("Endereço", value=st.session_state.endereco)
-            bairro = st.text_input("Bairro", value=st.session_state.bairro)
-            password = st.text_input("Digite uma senha:", type="password", value=st.session_state.password)
-            uploaded_file = st.file_uploader("Escolha uma imagem de perfil", type=["jpg", "jpeg", "png"])
+            endereco = st.text_input("endereço", value=st.session_state.get("endereco", ""))
+            bairro = st.text_input("bairro", value=st.session_state.get("bairro", ""))
+            password = st.text_input("digite uma senha:", type="password", value=st.session_state.get("password", ""))
+            uploaded_file = st.file_uploader("escolha uma imagem de perfil", type=["jpg", "jpeg", "png"])
+
             if uploaded_file is not None:
-                st.session_state.image = uploaded_file  # Armazena o arquivo de imagem no session_state
+                st.session_state.image = uploaded_file  # armazena o arquivo de imagem no session_state
+
+                # salva a imagem com o nome de usuário
+                username = st.session_state.username  # certifique-se de que o username está previamente definido
+                if username:
+                    directory = "./src/img/cliente"
+                    if not os.path.exists(directory):
+                        os.makedirs(directory)
+
+                    # salva a imagem no formato desejado
+                    image_path = os.path.join(directory, f"{username}.png")  # ou .jpg, conforme necessário
+                    image = Image.open(uploaded_file)  # Corrigido de 'image' para 'Image'
+                    image.save(image_path)
+
+                    st.success(f"imagem salva em: {image_path}")
+                else:
+                    st.warning("por favor, insira um nome de usuário antes de fazer o upload da imagem.")
 
         with col4:
-            cep = st.text_input("CEP", value=st.session_state.cep)
-            cidade = st.text_input("Cidade:", value=st.session_state.cidade)
+            cep = st.text_input("cep", value=st.session_state.cep)
+            cidade = st.text_input("cidade:", value=st.session_state.cidade)
             role = st.selectbox(
-                "Tipo de Usuário",
+                "tipo de usuário",
                 options=["cliente", "parceiro", "admin"],
                 index=0 if not st.session_state.role else ["cliente", "parceiro", "admin"].index(st.session_state.role))
-            username = st.text_input("Usuário:", value=st.session_state.username)
+            username = st.text_input("usuário:", value=st.session_state.username)
 
-        # Botão para enviar os dados do formulário
-        submit_button = st.form_submit_button("CRIAR CLIENTE!")
+        # botão para enviar os dados do formulário
+        submit_button = st.form_submit_button("criar cliente!")
 
         if submit_button:
-            # Atualiza o session_state após a coleta dos dados
+            # atualiza o session_state após a coleta dos dados
             st.session_state.name = name
             st.session_state.documento = documento
             st.session_state.email = email
@@ -213,7 +231,7 @@ def cadastrar_cliente():
             st.session_state.username = username
             st.session_state.password = password
 
-            cliente = Cliente(
+            cliente = cliente(
                 name=st.session_state.name,
                 email=st.session_state.email,
                 cpf_cnpj=st.session_state.documento,
@@ -228,7 +246,7 @@ def cadastrar_cliente():
                 image=st.session_state.image,
             )
 
-            # Adiciona o cliente ao arquivo config.yaml
+            # adiciona o cliente ao arquivo config.yaml
             client_data = {
                 'name': st.session_state.name,
                 'email': st.session_state.email,
@@ -243,41 +261,47 @@ def cadastrar_cliente():
                 'password': st.session_state.password,
             }
 
-            # Validação dos dados do cliente
+            # validação dos dados do cliente
             try:
-                # Verifique se todos os campos obrigatórios estão preenchidos
+                # verifique se todos os campos obrigatórios estão preenchidos
                 for field in ['name', 'email', 'cpf_cnpj', 'whatsapp', 'endereco', 'cep', 'bairro', 'cidade', 'username', 'password']:
                     if not client_data[field]:
-                        raise ValueError(f"O campo {field} é obrigatório.")
+                        raise ValueError(f"o campo {field} é obrigatório.")
 
-                # Adicione outras validações específicas, como verificação do formato do email e CPF/CNPJ
+                # adicione outras validações específicas, como verificação do formato do email e cpf/cnpj
                 # (implementação das funções de validação não mostrada aqui)
 
-                add_client_to_config(client_data)  # Chama a função para adicionar os dados ao config.yaml
+                add_client_to_config(client_data)  # chama a função para adicionar os dados ao config.yaml
 
             except ValueError as ve:
-                st.error(str(ve))  # Exibe um erro de validação ao usuário
+                st.error(str(ve))  # exibe um erro de validação ao usuário
             except Exception as e:
-                st.error("Ocorreu um erro ao adicionar o cliente. Por favor, tente novamente.")  # Tratamento genérico de erro
+                st.error("ocorreu um erro ao adicionar o cliente. por favor, tente novamente.")  # tratamento genérico de erro
 
-            # Verifica se a imagem foi carregada
+            # verifica se a imagem foi carregada
             if st.session_state.image is not None:
                 diretorio = 'src/img/cliente'
                 if not os.path.exists(diretorio):
                     os.makedirs(diretorio)
 
-                # Inclui o diretório no caminho da imagem
-                image_path = os.path.join(diretorio, f'{cliente.username}')  # Use a extensão correta
+                # inclui o diretório no caminho da imagem
+                image_path = os.path.join(diretorio, f'{cliente.username}.png')  # use a extensão correta
                 with open(image_path, "wb") as f:
-                    f.write(st.session_state.image.getbuffer())  # Escreve o conteúdo do arquivo
+                    f.write(st.session_state.image.getbuffer())  # escreve o conteúdo do arquivo
             else:
-                st.warning("Nenhuma imagem foi carregada.")
+                st.warning("nenhuma imagem foi carregada.")
 
         try:
             asyncio.create_task(handle_create_customer(cliente))
         except Exception as e:
-            # Aqui você pode registrar o erro em um log ou apenas ignorá-lo
-            pass  # Não exibe o erro na tela
+            # aqui você pode registrar o erro em um log ou apenas ignorá-lo
+            pass  # não exibe o erro na tela
+
+
+def is_valid_email(email):
+    # Basic regex pattern for email validation
+    email_pattern = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+    return re.match(email_pattern, email) is not None
 
 
 def is_valid_email(email):
@@ -324,22 +348,23 @@ def contact_form():
             st.error("Desculpe-me, parece que houve um problema no envio da sua mensagem", icon="😨")
 
 
+@st.dialog("Agendamento")
 def agendar_reuniao():
     global is_in_scheduling
     is_in_scheduling = True
 
     st.title('Agendar Reunião')
     with st.form("cadastro_reuniao"):
-        name = st.text_input("Nome")
-        whatsapp = st.text_input("WhatsApp")
-        whatsapp = st.text_input("E-mail")
-        endereco = st.text_input("Endereço")
-        message = st.text_area("Envie sua mensagem")
+        name = st.text_input("Nome:")
+        whatsapp = st.text_input("WhatsApp:")
+        email = st.text_input("E-mail:")
+        endereco = st.text_input("Endereço:")
+        message = st.text_area("Mensagem:")
         submit_button = st.form_submit_button("ENVIAR")
 
     if submit_button:
         if not WEBHOOK_URL:
-            st.error("Email service is not set up. Please try again later.", icon="📧")
+            st.error("O Webhook deverá ser configurado", icon="📧")
             st.stop()
 
         if not name:
@@ -350,19 +375,23 @@ def agendar_reuniao():
             st.error("Digite seu WhatsApp.", icon="📨")
             st.stop()
 
+        if not email:
+            st.error("Digite seu e-mail.", icon="📨")
+            st.stop()
+
         if not endereco:
             st.error("Digite seu endereço com o nome do bairro.", icon="📨")
             st.stop()
 
         if not message:
-            st.error("Deixe sua observação caso tenha.", icon="💬")
+            st.error("Deixe sua mensagem.", icon="💬")
             st.stop()
 
         # Prepare the data payload and send it to the specified webhook URL
-        data = {"Nome": name, "WhatsApp": whatsapp, "Endereço": endereco}
+        data = {"Nome": name, "WhatsApp": whatsapp, "Email": email, "Endereço": endereco, "Mensagem": message}
         response = requests.post(WEBHOOK_URL, json=data)
 
         if response.status_code == 200:
-            st.success("A sua mensagem foi enviada com sucesso! 🎉", icon="🚀")
+            st.success("A sua mensagem foi enviada, o Alan entrará em contato! 🎉", icon="🚀")
         else:
             st.error("Desculpe-me, parece que houve um problema no envio da sua mensagem", icon="😨")
