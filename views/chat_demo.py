@@ -10,7 +10,7 @@ import stripe
 from util import carregar_arquivos
 import os
 import glob
-from forms.contact import cadastrar_cliente
+from forms.contact import cadastrar_cliente, agendar_reuniao
 
 
 import replicate
@@ -40,8 +40,6 @@ if replicate_api is None:
     # Por exemplo, configurar uma lógica padrão ou deixar o aplicativo continuar sem mostrar nenhuma mensagem:
     st.warning('Um token de API é necessário para determinados recursos.', icon='⚠️')
 
-
-#######################################################################################################################
 
 def show_chat_demo():
     # Carregar apenas a aba "Dados" do arquivo Excel
@@ -96,6 +94,31 @@ def show_chat_demo():
 
     processar_docs = carregar_arquivos()
 
+
+    is_in_registration = False
+    is_in_scheduling = False
+
+
+    # Função para verificar se a pergunta está relacionada a cadastro
+    def is_health_question(prompt):
+        keywords = ["cadastrar", "inscrição", "quero me cadastrar", "gostaria de me registrar",
+                    "desejo me cadastrar", "quero fazer o cadastro", "quero me registrar", "quero me increver",
+                    "desejo me registrar", "desejo me inscrever","eu quero me cadastrar", "eu desejo me cadastrar",
+                    "eu desejo me registrar", "eu desejo me inscrever", "eu quero me registrar", "eu desejo me registrar",
+                    "eu quero me inscrever"]
+        return any(keyword.lower() in prompt.lower() for keyword in keywords)
+
+    #Função que analisa desejo de agendar uma reunião
+    def is_schedule_meeting_question(prompt):
+        keywords = [
+            "agendar reunião", "quero agendar uma reunião", "gostaria de agendar uma reunião",
+            "desejo agendar uma reunião", "quero marcar uma reunião", "gostaria de marcar uma reunião",
+            "desejo marcar uma reunião", "posso agendar uma reunião", "posso marcar uma reunião",
+            "Eu gostaria de agendar uma reuniao", "eu quero agendar", "eu quero agendar uma reunião,",
+            "quero reunião"
+        ]
+        return any(keyword.lower() in prompt.lower() for keyword in keywords)
+    
     # Atualizando o system_prompt
     system_prompt = f'''
     "Você é o Doutor Med (DM), um profissional com formação acadêmica em Farmácia (Bacharelado, Mestrado em Ciências Farmacêuticas e Doutorado em Farmacologia) e especialização em análise de dados médicos. Sua função é ler e analisar os dados fornecidos: {conteudos_txt}, oferecendo informações precisas e detalhadas.
@@ -130,11 +153,6 @@ def show_chat_demo():
     10. **Orientação durante o Cadastro:** Lembre-se de orientar o usuário a completar o formulário antes de qualquer nova interação.
     
     '''
-
-
-    # Set assistant icon to Snowflake logo
-    icons = {"assistant": "./src/img/perfil-doutor.png", "user": "./src/img/perfil-usuario.png"}
-
 
     st.markdown(
         """
@@ -195,9 +213,24 @@ def show_chat_demo():
             "role": "assistant", "content": 'Sou reconhecido como o Doutor Med, fui programado para demonstrar a você '
             'o poder e a velocidade que analiso seus dados.'}]
 
-    # Display or clear chat messages
+    # Dicionário de ícones
+    icons = {
+        "assistant": "./src/img/perfil-doutor.png",  # Ícone padrão do assistente
+        "user": "./src/img/perfil-usuario.png"            # Ícone padrão do usuário
+    }
+    
+    # Caminho para a imagem padrão
+    default_avatar_path = "./src/img/perfil-usuario.png"
+    
+    # Exibição das mensagens
     for message in st.session_state.messages:
-        with st.chat_message(message["role"], avatar=icons[message["role"]]):
+        if message["role"] == "user":
+            # Verifica se a imagem do usuário existe
+            avatar_image = st.session_state.image if "image" in st.session_state and st.session_state.image else default_avatar_path
+        else:
+            avatar_image = icons["assistant"]  # Ícone padrão do assistente
+    
+        with st.chat_message(message["role"], avatar=avatar_image):
             st.write(message["content"])
 
 
@@ -208,10 +241,7 @@ def show_chat_demo():
 
 
     st.sidebar.button('LIMPAR CONVERSA', on_click=clear_chat_history, key='limpar_conversa')
-    st.sidebar.caption(
-        'Built by [Snowflake](https://snowflake.com/) to demonstrate [Snowflake Arctic](https://www.snowflake.com/blog/arctic-open-and-efficient-foundation-language-models-snowflake). App hosted on [Streamlit Community Cloud](https://streamlit.io/cloud). Model hosted by [Replicate](https://replicate.com/snowflake/snowflake-arctic-instruct).')
-    st.sidebar.caption(
-        'Build your own app powered by Arctic and [enter to win](https://arctic-streamlit-hackathon.devpost.com/) $10k in prizes.')
+    
     st.sidebar.markdown("Desenvolvido por [WILLIAM EUSTÁQUIO](https://www.instagram.com/flashdigital.tech/)")
 
     @st.cache_resource(show_spinner=False)
@@ -270,8 +300,13 @@ def show_chat_demo():
 
             st.stop()  # Interrompe a execução do script aqui
 
+            if is_health_question(prompt_str):
+            cadastrar_cliente()
 
-        else:
+
+            if is_schedule_meeting_question(prompt_str):
+                agendar_reuniao()
+
             for event in replicate.stream(
                     "meta/meta-llama-3.1-405b-instruct",
                     input={
@@ -287,38 +322,31 @@ def show_chat_demo():
                 yield str(event)
 
 
-    # User-provided prompt
-    if prompt := st.chat_input(disabled=not replicate_api, key='prompt_user'):
-        st.session_state.messages.append({"role": "user", "content": prompt})
-
-        # Verifica se o usuário tem uma imagem de perfil
+    def get_avatar_image():
+        """Retorna a imagem do usuário ou a imagem padrão se não houver imagem cadastrada."""
         if st.session_state.image is not None:
-            # Se o usuário tiver uma imagem, usa a imagem carregada
-            avatar_path = st.session_state.image
+            return st.session_state.image  # Retorna a imagem cadastrada
         else:
-            # Caso contrário, usa uma imagem padrão
-            avatar_path = "./src/img/perfil-usuario.png"  # Caminho da imagem padrão
-
-        with st.chat_message("user", avatar=avatar_path):
+            return default_avatar_path  # Retorna a imagem padrão
+    
+    # User-provided prompt
+    if prompt := st.chat_input(disabled=not replicate_api):
+        st.session_state.messages.append({"role": "user", "content": prompt})
+        
+        # Chama a função para obter a imagem correta
+        avatar_image = get_avatar_image()
+        
+        with st.chat_message("user", avatar=avatar_image):
+            st.image(avatar_image, width=100, height=100)  # Define a imagem para 100x100 pixels
             st.write(prompt)
-
-
-    # Gera uma nova resposta se a última mensagem não for do assistente
-    try:
-        # Verifica se a lista de mensagens não está vazia
-        if st.session_state.messages and "role" in st.session_state.messages[-1]:
-            if st.session_state.messages[-1]["role"] != "assistant":
-                with st.chat_message("assistant", avatar="./src/img/perfil-doutor.png"):
-                    response = generate_arctic_response()
-                    full_response = st.write_stream(response)
-                message = {"role": "assistant", "content": full_response}
-                st.session_state.messages.append(message)
-        else:
-            st.warning("Não há mensagens disponíveis ou a estrutura da última mensagem está incorreta.")
-    except IndexError:
-        st.warning("Ocorreu um erro ao acessar a última mensagem: lista vazia.")
-    except KeyError as ke:
-        st.warning(f"Ocorreu um erro: {str(ke)}. A estrutura da mensagem pode estar incorreta.")
+    
+    # Generate a new response if last message is not from assistant
+    if st.session_state.messages[-1]["role"] != "assistant":
+        with st.chat_message("assistant", avatar="./src/img/perfil-doutor.png"):
+            response = generate_arctic_response()
+            full_response = st.write_stream(response)
+        message = {"role": "assistant", "content": full_response}
+        st.session_state.messages.append(message)
 
 
 
