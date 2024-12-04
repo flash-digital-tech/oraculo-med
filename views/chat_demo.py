@@ -298,7 +298,7 @@ def show_chat_demo():
             if st.button("Clique aqui para solicitar seu acesso"):
                 st.markdown(f"[ADQUIRIR ACESSO](https://buy.stripe.com/test_fZeg2L7MBcCE9heeUY)")
 
-            st.stop()  # Interrompe a execução do script aqui
+                st.stop()  # Interrompe a execução do script aqui
 
             if is_health_question(prompt_str):
             cadastrar_cliente()
