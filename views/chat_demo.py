@@ -10,21 +10,17 @@ import stripe
 from util import carregar_arquivos
 import os
 import glob
-from forms.contact import cadastrar_cliente, agendar_reuniao
-
+from forms.contact import cadastrar_cliente, agendar_reuniao 
 
 import replicate
 from langchain.llms import Replicate
 
-
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 from key_config import API_KEY_STRIPE, URL_BASE
 from decouple import config
 
 
 app = FastAPI()
+
 
 
 # --- Verifica se o token da API está nos segredos ---
@@ -41,30 +37,13 @@ if replicate_api is None:
     st.warning('Um token de API é necessário para determinados recursos.', icon='⚠️')
 
 
+#######################################################################################################################
+
 def show_chat_demo():
 
     if "image" not in st.session_state:
         st.session_state.image = None
-    # Carregar apenas a aba "Dados" do arquivo Excel
-    #df_dados = pd.read_excel('./conhecimento/medicos_dados_e_links.xlsx', sheet_name='Dados')
-
-    # Converter o DataFrame para um arquivo de texto, por exemplo, CSV
-    #df_dados.to_csv('./conhecimento/medicos_dados_e_links.txt', sep=' ', index=False, header=True)
-
-    # Se preferir usar tabulações como delimitador, substitua sep=' ' por sep='\t'
-    # df_dados.to_csv('./conhecimento/CatalogoMed_Sudeste_Dados.txt', sep='\t', index=False, header=True)
-
-    # Especifica o caminho para o arquivo .txt
-    #caminho_arquivo = './conhecimento/medicos_dados_e_links.txt'
-
-    # Abre o arquivo no modo de leitura ('r')
-    #with open(caminho_arquivo, 'r', encoding='utf-8') as arquivo:
-        # Lê todo o conteúdo do arquivo e armazena na variável conteudo
-        #info = arquivo.read()
-
-    # Exibe o conteúdo do arquivo
-    #df_txt = info
-
+    
     def ler_arquivos_txt(pasta):
         """
         Lê todos os arquivos .txt na pasta especificada e retorna uma lista com o conteúdo de cada arquivo.
@@ -95,9 +74,6 @@ def show_chat_demo():
     pasta_conhecimento = './conhecimento'  # Caminho da pasta onde os arquivos .txt estão localizados
     conteudos_txt = ler_arquivos_txt(pasta_conhecimento)
 
-    processar_docs = carregar_arquivos()
-
-
     is_in_registration = False
     is_in_scheduling = False
 
@@ -121,7 +97,7 @@ def show_chat_demo():
             "quero reunião"
         ]
         return any(keyword.lower() in prompt.lower() for keyword in keywords)
-    
+
     # Atualizando o system_prompt
     system_prompt = f'''
     "Você é o Doutor Med (DM), um profissional com formação acadêmica em Farmácia (Bacharelado, Mestrado em Ciências Farmacêuticas e Doutorado em Farmacologia) e especialização em análise de dados médicos. Sua função é ler e analisar os dados fornecidos: {conteudos_txt}, oferecendo informações precisas e detalhadas.
@@ -159,8 +135,27 @@ def show_chat_demo():
 
     st.markdown(
         """
-        <h1 style='text-align: center;'>Doctor Med</h1>
+        <style>
+        .highlight-creme {
+            background: linear-gradient(90deg, #f5f5dc, gold);  /* Gradiente do creme para dourado */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+        }
+        .highlight-dourado {
+            background: linear-gradient(90deg, gold, #f5f5dc);  /* Gradiente do dourado para creme */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+        }
+        </style>
         """,
+        unsafe_allow_html=True
+    )
+
+    # Título da página
+    st.markdown(
+        f"<h1 class='title'>Estude com o <span class='highlight-creme'>DOUTOR</span> <span class='highlight-dourado'>MED</span></h1>",
         unsafe_allow_html=True
     )
 
@@ -196,7 +191,7 @@ def show_chat_demo():
     st.sidebar.markdown("---")
 
     # Load and display sidebar image with glowing effect
-    img_path = "./src/img/perfil-doutor.png"
+    img_path = "./src/img/perfil-doutor.png
     img_base64 = img_to_base64(img_path)
     st.sidebar.markdown(
         f'<img src="data:image/png;base64,{img_base64}" class="cover-glow">',
@@ -213,8 +208,7 @@ def show_chat_demo():
     # Store LLM-generated responses
     if "messages" not in st.session_state.keys():
         st.session_state.messages = [{
-            "role": "assistant", "content": 'Sou reconhecido como o Doutor Med, fui programado para demonstrar a você '
-            'o poder e a velocidade que analiso seus dados.'}]
+            "role": "assistant", "content": '🌟 Bem-vindo ao Doutor Med! Seu analista de dados médicos.'}]
 
     # Dicionário de ícones
     icons = {
@@ -225,7 +219,7 @@ def show_chat_demo():
     # Caminho para a imagem padrão
     default_avatar_path = "./src/img/perfil-usuario.png"
     
-    # Exibição das mensagens
+     # Exibição das mensagens
     for message in st.session_state.messages:
         if message["role"] == "user":
             # Verifica se a imagem do usuário existe
@@ -239,12 +233,11 @@ def show_chat_demo():
 
     def clear_chat_history():
         st.session_state.messages = [{
-            "role": "assistant", "content": 'Sou reconhecido como o Doutor Med, fui programado para demonstrar a você '
-            'o poder e a velocidade que analiso seus dados.'}]
+            "role": "assistant", "content": '🌟 Bem-vindo ao Doutor Med! Seu analista de dados médicos.'}]
 
 
     st.sidebar.button('LIMPAR CONVERSA', on_click=clear_chat_history, key='limpar_conversa')
-    
+
     st.sidebar.markdown("Desenvolvido por [WILLIAM EUSTÁQUIO](https://www.instagram.com/flashdigital.tech/)")
 
     @st.cache_resource(show_spinner=False)
@@ -294,35 +287,26 @@ def show_chat_demo():
         prompt.append("")
         prompt_str = "\n".join(prompt)
 
-
-        if get_num_tokens(prompt_str) >= 500:  # padrão 3072
-            st.write("Você atingiu o limite de tokens. Para continuar, clique no link abaixo para ter 1 mês de análise.")
-
-            if st.button("Clique aqui para solicitar seu acesso"):
-                st.markdown(f"[ADQUIRIR ACESSO](https://buy.stripe.com/test_fZeg2L7MBcCE9heeUY)")
-
-                st.stop()  # Interrompe a execução do script aqui
-
-            if is_health_question(prompt_str):
-                cadastrar_cliente()
+        if is_health_question(prompt_str):
+            cadastrar_cliente()
 
 
-            if is_schedule_meeting_question(prompt_str):
-                agendar_reuniao()
+        if is_schedule_meeting_question(prompt_str):
+            agendar_reuniao()
 
-            for event in replicate.stream(
-                    "meta/meta-llama-3.1-405b-instruct",
-                    input={
-                        "top_k": 50,
-                        "top_p": 0.01,
-                        "prompt": prompt_str,
-                        "temperature": 0.1,
-                        "system_prompt": system_prompt,
-                        "length_penalty": 1,
-                        "max_new_tokens": 2048,
-                    },
-            ):
-                yield str(event)
+        for event in replicate.stream(
+                "meta/meta-llama-3.1-405b-instruct",
+                input={
+                    "top_k": 0,
+                    "top_p": 1,
+                    "prompt": prompt_str,
+                    "temperature": 0.1,
+                    "system_prompt": system_prompt,
+                    "length_penalty": 1,
+                    "max_new_tokens": 8000,
+                },
+        ):
+            yield str(event)
 
 
     def get_avatar_image():
@@ -335,20 +319,19 @@ def show_chat_demo():
     # User-provided prompt
     if prompt := st.chat_input(disabled=not replicate_api):
         st.session_state.messages.append({"role": "user", "content": prompt})
-        
+    
         # Chama a função para obter a imagem correta
         avatar_image = get_avatar_image()
-        
+    
         with st.chat_message("user", avatar=avatar_image):
             st.write(prompt)
     
     # Generate a new response if last message is not from assistant
-    if st.session_state.messages[-1]["role"] != "assistant":
+    if st.session_state.messages and st.session_state.messages[-1]["role"] != "assistant":
         with st.chat_message("assistant", avatar="./src/img/perfil-doutor.png"):
             response = generate_arctic_response()
             full_response = st.write_stream(response)
         message = {"role": "assistant", "content": full_response}
         st.session_state.messages.append(message)
-
 
 
