@@ -341,7 +341,7 @@ def show_chat_demo():
     
     # Generate a new response if last message is not from assistant
     if st.session_state.messages[-1]["role"] != "assistant":
-        with st.chat_message("assistant", avatar="./src/img/perfil-alan.jpg"):
+        with st.chat_message("assistant", avatar="./src/img/perfil-doutor.png"):
             response = generate_arctic_response()
             full_response = st.write_stream(response)
         message = {"role": "assistant", "content": full_response}
