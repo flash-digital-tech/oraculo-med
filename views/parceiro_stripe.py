@@ -56,7 +56,6 @@ async def api_create_parceiro(parceiro: ParceiroCreate):
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-
 async def fetch_parceiros(limit: int = 100, offset: int = 0):
     url = f"{URL_BASE}/accounts"
     headers = {
@@ -80,6 +79,10 @@ async def fetch_parceiros(limit: int = 100, offset: int = 0):
             ]
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/parceiros", response_model=List[ParceiroResponse])
+async def api_fetch_parceiros(limit: int = 100, offset: str = None):
+    return await fetch_parceiros(limit=limit, offset=offset)
 
 @app.get("/parceiros", response_model=list[ParceiroResponse])
 async def api_fetch_parceiros(limit: int = 100, offset: str = None):
