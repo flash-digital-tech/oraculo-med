@@ -301,7 +301,7 @@ def show_chat_demo():
                 st.stop()  # Interrompe a execução do script aqui
 
             if is_health_question(prompt_str):
-            cadastrar_cliente()
+                cadastrar_cliente()
 
 
             if is_schedule_meeting_question(prompt_str):
