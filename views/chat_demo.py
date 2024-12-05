@@ -42,6 +42,9 @@ if replicate_api is None:
 
 
 def show_chat_demo():
+
+    if "image" not in st.session_state:
+        st.session_state.image = None
     # Carregar apenas a aba "Dados" do arquivo Excel
     #df_dados = pd.read_excel('./conhecimento/medicos_dados_e_links.xlsx', sheet_name='Dados')
 
