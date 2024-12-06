@@ -220,9 +220,7 @@ def show_chat_med():
 
 
     def clear_chat_history():
-        st.session_state.messages = [{"role": "assistant", "content": 'Sou reconhecido como o Doutor Med, fui programado para te responder com uma '
-                                            'velocidade extraordinária e passar informações sobre médicos, especialidades,'
-                                            'consultas e orientações sobre suplementos e saúde.'}]
+        st.session_state.messages = [{"role": "assistant", "content": '🌟 Bem-vindo(a) ao Doutor Med! Seu analista de dados médicos.'}]
 
 
     st.sidebar.button('LIMPAR CONVERSA', on_click=clear_chat_history)
