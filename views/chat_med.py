@@ -136,32 +136,6 @@ def show_chat_med():
     
     '''
 
-    # Função para gerar o PDF
-    def create_pdf(messages):
-        pdf = FPDF()
-        pdf.add_page()
-        pdf.set_font("Arial", size=12)
-
-        for message in messages:
-            role = message["role"].capitalize()
-            content = message["content"]
-            pdf.cell(200, 10, txt=f"{role}: {content}", ln=True)
-
-        return pdf.output(dest='S').encode('latin1')
-
-
-    # Função para gerar o Excel
-    def create_excel(messages):
-        df = pd.DataFrame(messages)
-        buffer = io.BytesIO()
-        df.to_excel(buffer, index=False)
-        buffer.seek(0)
-        return buffer.getvalue()
-
-
-    # Set assistant icon to Snowflake logo
-    icons = {"assistant": "./src/img/perfil-doutor.png", "user": "./src/img/perfil-usuario.png"}
-
 
     # Replicate Credentials
     with st.sidebar:
@@ -222,13 +196,26 @@ def show_chat_med():
     # Store LLM-generated responses
     if "messages" not in st.session_state.keys():
         st.session_state.messages = [{
-            "role": "assistant", "content": 'Sou reconhecido como o Doutor Med, fui programado para te responder com uma '
-                                            'velocidade extraordinária e passar informações sobre médicos, especialidades,'
-                                            'consultas e orientações sobre suplementos e saúde.'}]
+            "role": "assistant", "content": '🌟 Bem-vindo ao Doutor Med! Seu analista de dados médicos.'}]
 
-    # Display or clear chat messages
+    # Dicionário de ícones
+    icons = {
+        "assistant": "./src/img/perfil-doutor.png",  # Ícone padrão do assistente
+        "user": "./src/img/perfil-usuario.png"            # Ícone padrão do usuário
+    }
+    
+    # Caminho para a imagem padrão
+    default_avatar_path = "./src/img/perfil-usuario.png"
+    
+     # Exibição das mensagens
     for message in st.session_state.messages:
-        with st.chat_message(message["role"], avatar=icons[message["role"]]):
+        if message["role"] == "user":
+            # Verifica se a imagem do usuário existe
+            avatar_image = st.session_state.image if "image" in st.session_state and st.session_state.image else default_avatar_path
+        else:
+            avatar_image = icons["assistant"]  # Ícone padrão do assistente
+    
+        with st.chat_message(message["role"], avatar=avatar_image):
             st.write(message["content"])
 
 
