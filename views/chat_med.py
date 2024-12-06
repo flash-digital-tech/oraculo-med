@@ -35,58 +35,6 @@ if replicate_api is None:
     st.warning('Um token de API é necessário para determinados recursos.', icon='⚠️')
 
 
-
-
-################################################# ENVIO DE E-MAIL ####################################################
-############################################# PARA CONFIRMAÇÃO DE DADOS ##############################################
-
-# Função para enviar o e-mail
-def enviar_email(destinatario, assunto, corpo):
-    remetente = "mensagem@flashdigital.tech"  # Insira seu endereço de e-mail
-    senha = "sua_senha"  # Insira sua senha de e-mail
-
-    msg = MIMEMultipart()
-    msg['From'] = remetente
-    msg['To'] = destinatario
-    msg['Subject'] = assunto
-    msg.attach(MIMEText(corpo, 'plain'))
-
-    try:
-        server = smtplib.SMTP('mail.flashdigital.tech', 587)
-        server.starttls()
-        server.login(remetente, senha)
-        server.sendmail(remetente, destinatario, msg.as_string())
-        server.quit()
-        st.success("E-mail enviado com sucesso!")
-    except Exception as e:
-        st.error(f"Erro ao enviar e-mail: {e}")
-
-    # Enviando o e-mail ao pressionar o botão de confirmação
-    if st.button("DADOS CONFIRMADO"):
-        # Obter os dados salvos em st.session_state
-        nome = st.session_state.user_data["name"]
-        whatsapp = st.session_state.user_data["whatsapp"]
-        email = st.session_state.user_data["email"]
-
-        # Construindo o corpo do e-mail
-        corpo_email = f"""
-        Olá {nome},
-
-        Segue a confirmação dos dados:
-        - Nome: {nome}
-        - WhatsApp: {whatsapp}
-        - E-mail: {email}
-        - Agendamento : {dias} e {turnos}
-
-        Obrigado pela confirmação!
-        """
-
-        # Enviando o e-mail
-        enviar_email(email, "Confirmação de dados", corpo_email)
-
-
-#######################################################################################################################
-
 def show_chat_med():
 
     if 'image' not in st.session_state:
