@@ -3,8 +3,8 @@ from streamlit_authenticator import Authenticate
 import yaml
 import asyncio
 from views.home import showHome
-from views.chat_fitness import show_chat_fitness
-from views.chat_fitness_demo import showChatDemo
+from views.chat_med import show_chat_med
+from views.chat_demo import showChatDemo
 from views.financeiro import show_financeiro
 from views.cliente_criar import show_create_customer
 from views.link_pagamento import show_pagamento_links
@@ -127,7 +127,7 @@ if 'authentication_status' in st.session_state and st.session_state['authenticat
 
     pages = {
         "Apresentação": showHome,
-        "DOUTOR MED": show_chat_fitness,
+        "DOUTOR MED": show_chat_med,
         "Chat Demo": showChatDemo,
         "Criar Cliente": show_create_customer,
         "Criar Parceiro": showSubconta,
